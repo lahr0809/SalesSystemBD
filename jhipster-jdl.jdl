@@ -1,20 +1,99 @@
 
+
+enum ProductType {
+	TANGIBLE, INTANGIBLE, BUNDLE
+    }
+    
+enum SupplierType {
+	MAIN, SECUNDARY, BOTH
+}
+
+entity AppUser {
+	phone String
+}
+
+entity Brand {
+	name String
+}
+
+
+entity Supplier {
+	businessName String,
+    businessPhone String,
+    email String,
+    website String,
+    personInCharge String,
+    phoneInCharge String,
+    note String,
+    type SupplierType,
+}
+
+
+enum AddressType {
+	FISCAL, RESIDENTIAL
+}
+
+entity Address {
+	direction String,
+	type AddressType
+}
+
+ 
+entity LegalDocument {
+	name String,
+	regex String,
+
+}
+
+
 entity Product {
-	productName String required,
-    productCode Integer,
-    productPrice Integer
+	name String required,
+    code Integer unique,
+    internCode String unique,
+    barCode String unique,
+    description String,
+    type ProductType,
+    taxType TaxType,
+    status Boolean,
+    inventarySale Boolean
+}
+
+enum TaxType {
+	TAXABLE, EXEMPT, UNAFFECTED
+}
+
+entity Country {
+	name String,
+    tax Tax,
+}
+
+enum Tax {
+	IVA, IGV
 }
 
 entity Category {
-	categoryName String required,
-    categoryDescription String,
-    categoryEstate String
+	name String required,
+    description String,
+    status String
 }
 
+relationship OneToOne {
+	AppUser{internalUser} to User
+    Supplier to LegalDocument
+}
 
 relationship OneToMany {
-	Category{product} to Product
+	Category to Product,
+    AppUser to Address
+    Supplier to Address,
+    Product to Brand
 }
+
+relationship ManyToMany {
+  Supplier to Product
+}
+
+
 
 
 // Set pagination options
